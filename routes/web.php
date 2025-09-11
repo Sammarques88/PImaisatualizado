@@ -60,7 +60,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/sala/iniciar', [SalaController::class, 'iniciar'])->name('sala.iniciar');
 
     // Chat com tema selecionado
-    Route::get('/chat/{tema}', [ChatController::class, 'index'])->name('chat.index');
+    Route::get('/chat/{tema?}', [App\Http\Controllers\ChatController::class, 'index'])
+    ->name('chat.index');
+
+
 
     // Laudos
     Route::get('/cadastrolaudo', fn () => view('cadastrolaudo'))->name('cadastrolaudo');
