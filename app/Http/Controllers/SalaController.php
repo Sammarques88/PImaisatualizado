@@ -13,9 +13,9 @@ class SalaController extends Controller
     {
         // lista de temas disponíveis
         $temas = [
-            'ansiedade' => 'Ansiedade',
-            'depressao' => 'Depressão',
-            'vicios' => 'Vícios',
+            'ansiedade'   => 'Ansiedade',
+            'depressao'   => 'Depressão',
+            'vicios'      => 'Vícios',
             'autocuidado' => 'Autocuidado/Autoconhecimento',
         ];
 
@@ -27,11 +27,13 @@ class SalaController extends Controller
      */
     public function iniciar(Request $request)
     {
+        // validação normal
         $request->validate([
-            'tema' => 'required|in:ansiedade,depressao,vicios,autocuidado',
+            'tema' => 'nullable|in:ansiedade,depressao,vicios,autocuidado',
         ]);
 
-        $tema = $request->input('tema');
+        // pega o tema enviado ou usa "ansiedade" como padrão
+        $tema = $request->input('tema', 'ansiedade');
 
         // redireciona para rota do chat já com o tema
         return redirect()->route('chat.index', ['tema' => $tema]);

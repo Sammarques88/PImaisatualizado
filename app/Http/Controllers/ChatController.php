@@ -11,35 +11,34 @@ class ChatController extends Controller
         $temas = [
             'ansiedade' => [
                 'titulo' => 'Ansiedade',
-                'video'  => 'videos/ansiedade.mp4',
+                'video'  => 'videos/video_ansiedade.mp4', // <-- Nome correto do arquivo
             ],
             'depressao' => [
                 'titulo' => 'Depressão',
-                'video'  => 'videos/depressao.mp4',
+                'video'  => 'videos/video_depressao.mp4',
             ],
             'vicios' => [
                 'titulo' => 'Vícios',
-                'video'  => 'videos/vicios.mp4',
+                'video'  => 'videos/video_vicios.mp4',
             ],
             'autocuidado' => [
                 'titulo' => 'Autocuidado',
-                'video'  => 'videos/autocuidado.mp4',
+                'video'  => 'videos/video_autoajuda.mp4',
             ],
         ];
 
-        // Se não for passado tema, usa "ansiedade" como padrão
-        if ($tema === null) {
-            $tema = 'ansiedade';
-        }
+        // se não veio tema, define "ansiedade" como padrão
+        $tema = $tema ?? 'ansiedade';
 
-        if (!array_key_exists($tema, $temas)) {
+        // se não existir no array, retorna 404
+        if (!isset($temas[$tema])) {
             abort(404, 'Tema não encontrado');
         }
 
         return view('chat', [
             'tema'       => $tema,
             'tituloTema' => $temas[$tema]['titulo'],
-            'videoSrc'   => asset($temas[$tema]['video']),
+            'videoSrc'   => asset($temas[$tema]['video']), // gera URL pública
         ]);
     }
 }

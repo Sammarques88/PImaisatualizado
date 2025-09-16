@@ -6,37 +6,215 @@
 <title>Sala Ao Vivo - Conexus | Tema: {{ $tituloTema }}</title>
 <style>
   :root{
-    --bg1:#111; --grad1:#5c3fa0; --grad2:#00c1c1; --primary:#5c3fa0; --light:#e0f7fa; --text:#fff; --ink:#111;
+    --bg1:#111; --grad1:#5c3fa0; --grad2:#00c1c1; --primary:#5c3fa0; --light:#e0f7fa; --text:#fff; --ink:#111;  
   }
   *{box-sizing:border-box}
-  body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#111;color:#fff}
+  body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#111;
+    color:#fff;
+  }  
   .container{
-    display:flex;flex-direction:column;min-height:100vh;width:100%;
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+    width:100%;
     background:linear-gradient(90deg,var(--grad1),var(--grad2));
     padding:16px;
   }
-  .header{ text-align:center;font-size:24px;font-weight:700;margin-bottom:8px; }
-  .subheader{ text-align:center;font-size:14px;opacity:.9;margin-bottom:16px; }
-  .chat-room{ display:grid;grid-template-columns:2.2fr 1fr 1.6fr;gap:16px;flex:1;min-height:0; }
-  .video-stack{ display:flex;flex-direction:column;gap:12px;min-height:0 }
-  .video-box{ background:#000;border-radius:12px;position:relative;display:flex;align-items:center;justify-content:center;min-height:220px;overflow:hidden; }
-  .video-box.doctor{flex:1.2} .video-box.user{flex:.8}
-  .avatar{ width:110px;height:110px;border-radius:50%;background:#5c3fa0;color:#fff;display:flex;align-items:center;justify-content:center; font-size:36px;font-weight:800;letter-spacing:.5px;box-shadow:0 6px 20px rgba(0,0,0,.35); }
-  video{width:100%;height:100%;object-fit:cover;display:block}
-  .controls{ position:absolute;bottom:12px;right:12px;display:flex;gap:8px; }
-  .controls button{ width:40px;height:40px;border:none;border-radius:50%;background:#ffffff22;color:#fff;cursor:pointer;font-size:18px;backdrop-filter: blur(3px); }
-  .participants{ display:flex;flex-direction:column;gap:10px;overflow:auto;padding-right:2px; }
-  .participant{ display:flex;align-items:center;gap:10px;background:#ffffff10;border:1px solid #ffffff22;border-radius:12px;padding:8px; }
-  .p-avatar{ width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;box-shadow:0 2px 10px rgba(0,0,0,.25); }
-  .p-name{font-weight:700} .bot-tag{opacity:.8;font-size:12px}
-  .chat-box{ display:flex;flex-direction:column;background:var(--light);color:#000;border-radius:12px;padding:10px;min-height:0; }
-  .messages{flex:1;overflow:auto;margin-bottom:8px} .message{margin:6px 0;line-height:1.35}
-  .message .who{font-weight:800}
-  .chip{ display:inline-flex;align-items:center;gap:6px;background:#ffffff; border-radius:999px; padding:6px 10px; font-size:12px; color:#333; margin-bottom:6px; }
-  .chat-input{display:flex;gap:8px}
-  .chat-input input{ flex:1;padding:10px;border-radius:10px;border:1px solid #ccc;font-size:14px; }
-  .chat-input button{ padding:10px 16px;border:none;border-radius:10px;background:var(--primary);color:#fff;font-weight:700;cursor:pointer; }
-  .tiny{font-size:12px;opacity:.85}
+  .header{ 
+    text-align:center;
+    font-size:24px;
+    font-weight:700;
+    margin-bottom:8px; 
+  }
+  .subheader{ 
+    text-align:center;
+    font-size:14px;
+    opacity:.9;
+    margin-bottom:16px; 
+  }
+  .chat-room{ 
+    display:grid;
+    grid-template-columns:2.2fr 1fr 1.6fr;
+    gap:16px;
+    flex:1;
+    min-height:0; 
+  }
+  .video-stack{ 
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    min-height:0 
+  }
+  .video-box{ 
+    background:#000;
+    border-radius:12px;
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:220px;
+    overflow:hidden; 
+  }  
+  .video-box.doctor {
+    position: relative;
+    overflow: hidden;
+  }
+  #doctorVideo, #doctorAvatar {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+    transition: opacity 0.5s ease;
+  }
+  #doctorAvatar {
+    display: flex; /* para centralizar texto */
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    background-color: #5c3fa0;
+    color: #fff;
+    z-index: 1;
+    opacity: 0; /* começa escondido */
+    pointer-events: none;
+  }
+  .video-box.doctor{flex:1.2} 
+  .video-box.user{flex:.8}
+  .avatar{ 
+    width:110px;
+    height:110px;
+    border-radius:50%;
+    background:#5c3fa0;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center; 
+    font-size:36px;
+    font-weight:800;
+    letter-spacing:.5px;
+    box-shadow:0 6px 20px rgba(0,0,0,.35); 
+  }  
+  video{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block
+  }
+
+  .controls{ 
+    position:absolute;
+    bottom:12px;
+    right:12px;
+    display:flex;
+    gap:8px; 
+  }
+  .controls button{ 
+    width:40px;
+    height:40px;
+    border:none;
+    border-radius:50%;
+    background:#ffffff22;
+    color:#fff;
+    cursor:pointer;
+    font-size:18px;
+    backdrop-filter: blur(3px); 
+  }  
+  .participants{ 
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    overflow:auto;
+    padding-right:2px; 
+  }
+  .participant{ 
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:#ffffff10;
+    border:1px solid #ffffff22;
+    border-radius:12px;
+    padding:8px; 
+  }  
+  .p-avatar{ 
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:800;
+    color:#fff;
+    box-shadow:0 2px 10px rgba(0,0,0,.25); 
+  }  
+  .p-name{
+    font-weight:700
+  } 
+  .bot-tag{
+    opacity:.8;
+    font-size:12px
+  }
+  .chat-box{ 
+    display:flex;
+    flex-direction:column;
+    background:var(--light);
+    color:#000;
+    border-radius:12px;
+    padding:10px;
+    min-height:0; 
+  }  
+  .messages{
+    flex:1;
+    overflow:auto;
+    margin-bottom:8px
+  } 
+  .message{
+    margin:6px 0;
+    line-height:1.35
+  }
+  .message .who{
+    font-weight:800
+  }
+  .chip{ 
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    background:#ffffff; 
+    border-radius:999px; 
+    padding:6px 10px; 
+    font-size:12px; 
+    color:#333; 
+    margin-bottom:6px; 
+  }  
+  .chat-input{
+    display:flex;
+    gap:8px
+  }
+  .chat-input input{ 
+    flex:1;
+    padding:10px;
+    border-radius:10px;
+    border:1px solid #ccc;
+    font-size:14px; 
+  }  
+  .chat-input button{ 
+    padding:10px 16px;
+    border:none;
+    border-radius:10px;
+    background:var(--primary);
+    color:#fff;
+    font-weight:700;
+    cursor:pointer; 
+  }  
+  .tiny{
+    font-size:12px;
+    opacity:.85
+  }
 </style>
 </head>
 <body>
@@ -50,11 +228,13 @@
       <!-- Dr. Lucas: vídeo de abertura por tema -->
       <div class="video-box doctor" id="doctorBox">
         <div id="doctorAvatar" class="avatar" style="display:none;">DR</div>
-        <video id="doctorVideo" preload="metadata">
-          <source src="{{ asset($videoSrc) }}" type="video/mp4">
+        <video id="doctorVideo" preload="auto" autoplay muted playsinline>
+          <source src="{{ $videoSrc }}" type="video/mp4">
           Seu navegador não suporta vídeo.
         </video>
       </div>
+
+  
 
       <!-- Usuário (câmera simulada - avatar) -->
       <div class="video-box user">
@@ -83,7 +263,7 @@
         <input type="text" id="userInput" placeholder="Escrever..." autocomplete="off">
         <button id="sendBtn">Enviar</button>
       </div>
-      <div class="tiny">O moderador inicia e novos ciclos acontecem automaticamente a cada 60s.</div>
+      <div class="tiny">O moderador inicia e novos ciclos acontecem automaticamente a cada 30s.</div>
     </div>
   </div>
 </div>
@@ -92,15 +272,15 @@
   const temaAtual = @json($tema);
 
   const participantes = [
-    { nome: "Você", corBg:"#000000", corTxt:"#ffffff", bot:false, rotulo:"" },
-    { nome: "Dr. Lucas", corBg:"#ff6f61", corTxt:"#ffffff", bot:true, rotulo:"🤖 Moderador" },
-    { nome: "Bárbara",  corBg:"#2b2aff", corTxt:"#ffffff", bot:true, rotulo:"🤖" },
-    { nome: "João",     corBg:"#a42bff", corTxt:"#ffffff", bot:true, rotulo:"🤖" },
-    { nome: "Satoru",   corBg:"#5b2bff", corTxt:"#ffffff", bot:true, rotulo:"🤖" },
-    { nome: "Paul",     corBg:"#ff2b5b", corTxt:"#ffffff", bot:true, rotulo:"🤖" },
-    { nome: "Caleb",    corBg:"#2bffa0", corTxt:"#111111", bot:true, rotulo:"🤖" },
-    { nome: "Ana",      corBg:"#ffcc00", corTxt:"#111111", bot:true, rotulo:"🤖" },
-    { nome: "Felipe",   corBg:"#00bfff", corTxt:"#111111", bot:true, rotulo:"🤖" },
+    { nome: "Dr. Lucas", corBg:"#ff6f61", corTxt:"#ffffff", bot:true, rotulo:"Moderador" },
+    { nome: "Você", corBg:"#000000", corTxt:"#ffffff", bot:false, rotulo:"Participante" },    
+    { nome: "Bárbara",  corBg:"#2b2aff", corTxt:"#ffffff", bot:true, rotulo:"Participante"},
+    { nome: "Luan",     corBg:"#a42bff", corTxt:"#ffffff", bot:true, rotulo:"Participante"},
+    { nome: "Satoru",   corBg:"#5b2bff", corTxt:"#ffffff", bot:true, rotulo:"Participante" },
+    { nome: "Higor",     corBg:"#ff2b5b", corTxt:"#ffffff", bot:true, rotulo:"Participante" },
+    { nome: "Calebi",    corBg:"#2bffa0", corTxt:"#111111", bot:true, rotulo:"Participante" },
+    { nome: "Ana",      corBg:"#ffcc00", corTxt:"#111111", bot:true, rotulo:"Participante" },
+    { nome: "Bryan",   corBg:"#00bfff", corTxt:"#111111", bot:true, rotulo:"Participante" },
   ];
 
   const messagesEl = document.getElementById('messages');
@@ -223,7 +403,7 @@
 
   function iniciarCiclos(){
     iniciarRodada();
-    setInterval(iniciarRodada, 60000);
+    setInterval(iniciarRodada, 30000); // alterei para 30s conforme o texto da tela
   }
 
   const inputEl = document.getElementById('userInput');
@@ -240,21 +420,29 @@
   renderParticipantes();
 
   // ---------- Início automático para testes ----------
+
+
   window.addEventListener('DOMContentLoaded', () => {
-    doctorVideo.play().then(() => {
-      // vídeo rodando normalmente
-      doctorVideo.addEventListener('ended', () => {
-        doctorVideo.parentElement.style.display = 'none';
-        doctorAvatar.style.display = 'flex';
-        iniciarCiclos();
-      });
-    }).catch(() => {
-      // autoplay bloqueado ou teste direto: pula para o chat
-      doctorVideo.parentElement.style.display = 'none';
-      doctorAvatar.style.display = 'flex';
+  doctorVideo.play().then(() => {
+    doctorVideo.addEventListener('ended', () => {
+      // Fade out o vídeo e fade in o avatar "DR"
+      doctorVideo.style.opacity = '0';
+      doctorAvatar.style.opacity = '1';
+      
+      // Opcional: para evitar clique no vídeo depois
+      doctorVideo.style.pointerEvents = 'none';
+
       iniciarCiclos();
     });
+  }).catch(() => {
+    // autoplay bloqueado ou erro, já mostra avatar e inicia ciclos
+    doctorVideo.style.opacity = '0';
+    doctorAvatar.style.opacity = '1';
+    doctorVideo.style.pointerEvents = 'none';
+    iniciarCiclos();
   });
+});
+
 </script>
 </body>
 </html>
