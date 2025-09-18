@@ -56,14 +56,11 @@ Route::middleware('auth')->group(function () {
     Route::put('/perfil', [ProfileController::class, 'update'])->name('perfil.update');
 
     // Escolha da sala e início do chat
-    Route::get('/sala', [SalaController::class, 'index'])->name('sala.index');
+    Route::get('/sala', [SalaController::class, 'index'])->name('sala.index');          // View sala.blade.php
     Route::post('/sala/iniciar', [SalaController::class, 'iniciar'])->name('sala.iniciar');
 
     // Chat com tema selecionado
-    Route::get('/chat/{tema?}', [App\Http\Controllers\ChatController::class, 'index'])
-    ->name('chat.index');
-
-
+    Route::get('/chat/{tema?}', [ChatController::class, 'index'])->name('chat.index');
 
     // Laudos
     Route::get('/cadastrolaudo', fn () => view('cadastrolaudo'))->name('cadastrolaudo');

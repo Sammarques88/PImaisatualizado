@@ -23,6 +23,29 @@
     background:linear-gradient(90deg,var(--grad1),var(--grad2));
     padding:16px;
   }
+
+  /* NOVO: Top bar com botão sair */
+  .top-bar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 8px;
+  }
+
+  .exit-button {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .exit-button:hover {
+    background-color: #e60000;
+  }
+
   .header{ 
     text-align:center;
     font-size:24px;
@@ -71,19 +94,7 @@
     border-radius: 12px;
     transition: opacity 0.5s ease;
   }
-  #doctorAvatar {
-    display: flex; /* para centralizar texto */
-    align-items: center;
-    justify-content: center;
-    font-size: 36px;
-    font-weight: 800;
-    letter-spacing: 0.5px;
-    background-color: #5c3fa0;
-    color: #fff;
-    z-index: 1;
-    opacity: 0; /* começa escondido */
-    pointer-events: none;
-  }
+
   .video-box.doctor{flex:1.2} 
   .video-box.user{flex:.8}
   .avatar{ 
@@ -151,7 +162,38 @@
     font-weight:800;
     color:#fff;
     box-shadow:0 2px 10px rgba(0,0,0,.25); 
-  }  
+  } 
+  
+  .circle-avatar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.circle-avatar::before {
+  content: "DR";
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background-color: #ff6f61; /* cor salmão */
+  color: #fff;
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+}
+
   .p-name{
     font-weight:700
   } 
@@ -219,6 +261,12 @@
 </head>
 <body>
 <div class="container">
+
+  <!-- NOVO: Botão de Sair do Chat -->
+  <div class="top-bar">
+    <button onclick="window.location.href='{{ route('area-user') }}'" class="exit-button">🚪 Sair do Chat</button>
+  </div>
+
   <div class="header">Salas Ao Vivo - Conexus</div>
   <div class="subheader">Tema: <strong>{{ $tituloTema }}</strong></div>
 
@@ -227,18 +275,86 @@
     <div class="video-stack">
       <!-- Dr. Lucas: vídeo de abertura por tema -->
       <div class="video-box doctor" id="doctorBox">
-        <div id="doctorAvatar" class="avatar" style="display:none;">DR</div>
+        <div id="doctorAvatar" class="circle-avatar"></div>
         <video id="doctorVideo" preload="auto" autoplay muted playsinline>
           <source src="{{ $videoSrc }}" type="video/mp4">
           Seu navegador não suporta vídeo.
         </video>
       </div>
 
-  
+      <!-- Usuário (câmera simulada - avatar) -->
+      <div class="video-box user">
+        <!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Sala Ao Vivo - Conexus | Tema: {{ $tituloTema }}</title>
+<style>
+  /* ... seu CSS permanece exatamente igual ... */
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- NOVO: Botão de Sair do Chat -->
+  <div class="top-bar">
+    <button onclick="window.location.href='{{ route('area-user') }}'" class="exit-button">🚪 Sair do Chat</button>
+  </div>
+
+  <div class="header">Salas Ao Vivo - Conexus</div>
+  <div class="subheader">Tema: <strong>{{ $tituloTema }}</strong></div>
+
+  <div class="chat-room">
+    <!-- Coluna 1: Vídeos -->
+    <div class="video-stack">
+      <!-- Dr. Lucas: vídeo de abertura por tema -->
+      <div class="video-box doctor" id="doctorBox">
+        <div id="doctorAvatar" class="circle-avatar"></div>
+        <video id="doctorVideo" preload="auto" autoplay muted playsinline>
+          <source src="{{ $videoSrc }}" type="video/mp4">
+          Seu navegador não suporta vídeo.
+        </video>
+      </div>
 
       <!-- Usuário (câmera simulada - avatar) -->
       <div class="video-box user">
-        <div class="avatar">V</div>
+        <div class="avatar">{{ strtoupper(auth()->user()->name[0] ?? 'V') }}</div> <!-- Alteração aqui -->
+        <div class="controls">
+          <button title="Câmera">📷</button>
+          <button title="Chamada">📞</button>
+          <button title="Microfone">🎤</button>
+          <button title="Mais">⋮</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Coluna 2: Participantes -->
+    <div class="participants" id="participants"></div>
+
+    <!-- Coluna 3: Chat -->
+    <div class="chat-box">
+      <div class="chip">
+        <span>👨‍⚕️ Moderador: Dr. Lucas</span>
+        <span>•</span>
+        <span>🤖 7 bots ativos</span>
+      </div>
+      <div class="messages" id="messages"></div>
+      <div class="chat-input">
+        <input type="text" id="userInput" placeholder="Escrever..." autocomplete="off">
+        <button id="sendBtn">Enviar</button>
+      </div>
+      <div class="tiny">O moderador inicia e novos ciclos acontecem automaticamente a cada 30s.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* ... seu JavaScript permanece igual ... */
+</script>
+</body>
+</html>
+
         <div class="controls">
           <button title="Câmera">📷</button>
           <button title="Chamada">📞</button>
@@ -403,7 +519,7 @@
 
   function iniciarCiclos(){
     iniciarRodada();
-    setInterval(iniciarRodada, 30000); // alterei para 30s conforme o texto da tela
+    setInterval(iniciarRodada, 30000); // 30s conforme indicado na tela
   }
 
   const inputEl = document.getElementById('userInput');
@@ -419,29 +535,21 @@
 
   renderParticipantes();
 
-  // ---------- Início automático para testes ----------
-
-
   window.addEventListener('DOMContentLoaded', () => {
-  doctorVideo.play().then(() => {
-    doctorVideo.addEventListener('ended', () => {
-      // Fade out o vídeo e fade in o avatar "DR"
+    doctorVideo.play().then(() => {
+      doctorVideo.addEventListener('ended', () => {
+        doctorVideo.style.opacity = '0';
+        doctorAvatar.style.opacity = '1';
+        doctorVideo.style.pointerEvents = 'none';
+        iniciarCiclos();
+      });
+    }).catch(() => {
       doctorVideo.style.opacity = '0';
       doctorAvatar.style.opacity = '1';
-      
-      // Opcional: para evitar clique no vídeo depois
       doctorVideo.style.pointerEvents = 'none';
-
       iniciarCiclos();
     });
-  }).catch(() => {
-    // autoplay bloqueado ou erro, já mostra avatar e inicia ciclos
-    doctorVideo.style.opacity = '0';
-    doctorAvatar.style.opacity = '1';
-    doctorVideo.style.pointerEvents = 'none';
-    iniciarCiclos();
   });
-});
 
 </script>
 </body>
