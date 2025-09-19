@@ -24,13 +24,12 @@
     padding:16px;
   }
 
-  /* NOVO: Top bar com botão sair */
+  /* Top bar com botão sair */
   .top-bar {
     display: flex;
     justify-content: flex-end;
     margin-bottom: 8px;
   }
-
   .exit-button {
     background-color: #ff4d4d;
     color: white;
@@ -41,11 +40,9 @@
     cursor: pointer;
     transition: background-color 0.3s;
   }
-
   .exit-button:hover {
     background-color: #e60000;
   }
-
   .header{ 
     text-align:center;
     font-size:24px;
@@ -94,7 +91,6 @@
     border-radius: 12px;
     transition: opacity 0.5s ease;
   }
-
   .video-box.doctor{flex:1.2} 
   .video-box.user{flex:.8}
   .avatar{ 
@@ -117,7 +113,6 @@
     object-fit:cover;
     display:block
   }
-
   .controls{ 
     position:absolute;
     bottom:12px;
@@ -163,37 +158,34 @@
     color:#fff;
     box-shadow:0 2px 10px rgba(0,0,0,.25); 
   } 
-  
   .circle-avatar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
-
-.circle-avatar::before {
-  content: "DR";
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 110px;
-  height: 110px;
-  border-radius: 50%;
-  background-color: #ff6f61; /* cor salmão */
-  color: #fff;
-  font-size: 36px;
-  font-weight: 800;
-  letter-spacing: 0.5px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.35);
-}
-
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+  .circle-avatar::before {
+    content: "DR";
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background-color: #ff6f61; /* cor salmão */
+    color: #fff;
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+  }
   .p-name{
     font-weight:700
   } 
@@ -262,7 +254,7 @@
 <body>
 <div class="container">
 
-  <!-- NOVO: Botão de Sair do Chat -->
+  <!-- Botão de Sair do Chat -->
   <div class="top-bar">
     <button onclick="window.location.href='{{ route('area-user') }}'" class="exit-button">🚪 Sair do Chat</button>
   </div>
@@ -276,50 +268,15 @@
       <!-- Dr. Lucas: vídeo de abertura por tema -->
       <div class="video-box doctor" id="doctorBox">
         <div id="doctorAvatar" class="circle-avatar"></div>
-        <video id="doctorVideo" preload="auto" autoplay muted playsinline>
-          <source src="{{ $videoSrc }}" type="video/mp4">
+        <video id="doctorVideo" autoplay muted playsinline preload="auto">
+        <source src="{{ $videoSrc }}" type="video/mp4">
           Seu navegador não suporta vídeo.
         </video>
       </div>
 
-      <!-- Usuário (câmera simulada - avatar) -->
+      <!-- Usuário (avatar) -->
       <div class="video-box user">
-        <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Sala Ao Vivo - Conexus | Tema: {{ $tituloTema }}</title>
-<style>
-  /* ... seu CSS permanece exatamente igual ... */
-</style>
-</head>
-<body>
-<div class="container">
-
-  <!-- NOVO: Botão de Sair do Chat -->
-  <div class="top-bar">
-    <button onclick="window.location.href='{{ route('area-user') }}'" class="exit-button">🚪 Sair do Chat</button>
-  </div>
-
-  <div class="header">Salas Ao Vivo - Conexus</div>
-  <div class="subheader">Tema: <strong>{{ $tituloTema }}</strong></div>
-
-  <div class="chat-room">
-    <!-- Coluna 1: Vídeos -->
-    <div class="video-stack">
-      <!-- Dr. Lucas: vídeo de abertura por tema -->
-      <div class="video-box doctor" id="doctorBox">
-        <div id="doctorAvatar" class="circle-avatar"></div>
-        <video id="doctorVideo" preload="auto" autoplay muted playsinline>
-          <source src="{{ $videoSrc }}" type="video/mp4">
-          Seu navegador não suporta vídeo.
-        </video>
-      </div>
-
-      <!-- Usuário (câmera simulada - avatar) -->
-      <div class="video-box user">
-        <div class="avatar">{{ strtoupper(auth()->user()->name[0] ?? 'V') }}</div> <!-- Alteração aqui -->
+        <div class="avatar">{{ strtoupper((auth()->user()->name ?? 'Você')[0]) }}</div> 
         <div class="controls">
           <button title="Câmera">📷</button>
           <button title="Chamada">📞</button>
@@ -341,7 +298,7 @@
       </div>
       <div class="messages" id="messages"></div>
       <div class="chat-input">
-        <input type="text" id="userInput" placeholder="Escrever..." autocomplete="off">
+        <input type="text" id="userInput" placeholder="Escrever..." autocomplete="off" />
         <button id="sendBtn">Enviar</button>
       </div>
       <div class="tiny">O moderador inicia e novos ciclos acontecem automaticamente a cada 30s.</div>
@@ -350,46 +307,13 @@
 </div>
 
 <script>
-  /* ... seu JavaScript permanece igual ... */
-</script>
-</body>
-</html>
-
-        <div class="controls">
-          <button title="Câmera">📷</button>
-          <button title="Chamada">📞</button>
-          <button title="Microfone">🎤</button>
-          <button title="Mais">⋮</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Coluna 2: Participantes -->
-    <div class="participants" id="participants"></div>
-
-    <!-- Coluna 3: Chat -->
-    <div class="chat-box">
-      <div class="chip">
-        <span>👨‍⚕️ Moderador: Dr. Lucas</span>
-        <span>•</span>
-        <span>🤖 7 bots ativos</span>
-      </div>
-      <div class="messages" id="messages"></div>
-      <div class="chat-input">
-        <input type="text" id="userInput" placeholder="Escrever..." autocomplete="off">
-        <button id="sendBtn">Enviar</button>
-      </div>
-      <div class="tiny">O moderador inicia e novos ciclos acontecem automaticamente a cada 30s.</div>
-    </div>
-  </div>
-</div>
-
-<script>
+  // Tema atual - deve ser setado pelo backend
   const temaAtual = @json($tema);
 
+  // Participantes
   const participantes = [
     { nome: "Dr. Lucas", corBg:"#ff6f61", corTxt:"#ffffff", bot:true, rotulo:"Moderador" },
-    { nome: "Você", corBg:"#000000", corTxt:"#ffffff", bot:false, rotulo:"Participante" },    
+    { nome: "Você", corBg:"#000000", corTxt:"#ffffff", bot:false, rotulo:"Participante" },
     { nome: "Bárbara",  corBg:"#2b2aff", corTxt:"#ffffff", bot:true, rotulo:"Participante"},
     { nome: "Luan",     corBg:"#a42bff", corTxt:"#ffffff", bot:true, rotulo:"Participante"},
     { nome: "Satoru",   corBg:"#5b2bff", corTxt:"#ffffff", bot:true, rotulo:"Participante" },
@@ -399,38 +323,7 @@
     { nome: "Bryan",   corBg:"#00bfff", corTxt:"#111111", bot:true, rotulo:"Participante" },
   ];
 
-  const messagesEl = document.getElementById('messages');
-  const participantsEl = document.getElementById('participants');
-
-  function inicial(nome){
-    if (nome.toUpperCase() === "DR. LUCAS") return "DR";
-    return nome.trim().charAt(0).toUpperCase();
-  }
-
-  function renderParticipantes(){
-    participantsEl.innerHTML = "";
-    participantes.forEach(p => {
-      const el = document.createElement('div');
-      el.className = 'participant';
-      el.innerHTML = `
-        <div class="p-avatar" style="background:${p.corBg};color:${p.corTxt}">${inicial(p.nome)}</div>
-        <div>
-          <div class="p-name">${p.nome}</div>
-          ${p.bot ? `<div class="bot-tag">${p.rotulo}</div>` : ``}
-        </div>
-      `;
-      participantsEl.appendChild(el);
-    });
-  }
-
-  function addMessage(quem, cor, texto){
-    const div = document.createElement('div');
-    div.className = 'message';
-    div.innerHTML = `<span class="who" style="color:${cor}">${quem}:</span> ${texto}`;
-    messagesEl.appendChild(div);
-    messagesEl.scrollTop = messagesEl.scrollHeight;
-  }
-
+  // Fala do moderador por tema
   const falasModerador = {
     ansiedade: [
       "Hoje vamos conversar sobre ansiedade. Como ela tem afetado o dia a dia de vocês?",
@@ -454,6 +347,7 @@
     ]
   };
 
+  // Fala dos bots por tema
   const falasBots = {
     ansiedade: [
       "Uso respiração guiada e noto alívio em minutos.",
@@ -493,63 +387,129 @@
     ]
   };
 
+  const messagesEl = document.getElementById('messages');
+  const participantsEl = document.getElementById('participants');
   const doctorVideo = document.getElementById('doctorVideo');
   const doctorAvatar = document.getElementById('doctorAvatar');
 
-  function falaModerador(){
-    const lista = falasModerador[temaAtual] || falasModerador.ansiedade;
-    return lista[Math.floor(Math.random()*lista.length)];
+  // Função para pegar inicial (DR para Dr. Lucas)
+  function inicial(nome){
+    if(nome.toUpperCase() === "DR. LUCAS") return "DR";
+    return nome.trim().charAt(0).toUpperCase();
   }
 
-  function falaBot(){
-    const lista = falasBots[temaAtual] || falasBots.ansiedade;
-    return lista[Math.floor(Math.random()*lista.length)];
-  }
-
-  function iniciarRodada(){
-    addMessage('Dr. Lucas', '#ff6f61', falaModerador());
-    const ordemBots = participantes.filter(p => p.bot && p.nome !== 'Dr. Lucas');
-    let acumulado = 1200;
-    ordemBots.forEach(b => {
-      const jitter = 3000 + Math.floor(Math.random()*2000);
-      acumulado += jitter;
-      setTimeout(() => addMessage(b.nome, b.corBg, falaBot()), acumulado);
+  // Renderizar lista de participantes
+  function renderParticipantes(){
+    participantsEl.innerHTML = "";
+    participantes.forEach(p => {
+      const el = document.createElement('div');
+      el.className = 'participant';
+      el.innerHTML = `
+        <div class="p-avatar" style="background:${p.corBg};color:${p.corTxt}">${inicial(p.nome)}</div>
+        <div>
+          <div class="p-name">${p.nome}</div>
+          ${p.bot ? `<div class="bot-tag">${p.rotulo}</div>` : ''}
+        </div>
+      `;
+      participantsEl.appendChild(el);
     });
   }
 
+  // Adiciona mensagem no chat
+  function addMessage(quem, cor, texto){
+    const div = document.createElement('div');
+    div.className = 'message';
+    div.innerHTML = `<span class="who" style="color:${cor}">${quem}:</span> ${texto}`;
+    messagesEl.appendChild(div);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+
+  // Cíclicos de mensagens do moderador e bots
+  let indexModerador = 0;
+  let indexBots = 0;
+  let cicloInterval = null;
+
+  function falaModerador(){
+    const lista = falasModerador[temaAtual] || [];
+    if(indexModerador >= lista.length) indexModerador = 0;
+    addMessage("Dr. Lucas", "#ff6f61", lista[indexModerador]);
+    indexModerador++;
+  }
+
+  function falaBots(){
+    const lista = falasBots[temaAtual] || [];
+    if(indexBots >= lista.length) indexBots = 0;
+    // 7 bots falando sequencialmente em ciclo a cada 30s
+    // Para simplificar, vamos fazer 7 mensagens na sequência com intervalo pequeno entre elas
+    for(let i=0; i<7; i++){
+      setTimeout(() => {
+        const bot = participantes.filter(p=>p.bot && p.nome !== "Dr. Lucas")[i];
+        if(bot && lista.length > 0){
+          const msg = lista[(indexBots + i) % lista.length];
+          addMessage(bot.nome, bot.corBg, msg);
+        }
+      }, i*3000); // 3 segundos entre bots na mesma rodada
+    }
+    indexBots +=7;
+  }
+
+  // Inicia os ciclos (Moderador + Bots a cada 30 segundos)
   function iniciarCiclos(){
-    iniciarRodada();
-    setInterval(iniciarRodada, 30000); // 30s conforme indicado na tela
+    falaModerador();
+    falaBots();
+
+    cicloInterval = setInterval(()=>{
+      falaModerador();
+      falaBots();
+    }, 30000);
   }
 
-  const inputEl = document.getElementById('userInput');
-  const sendBtn = document.getElementById('sendBtn');
-  function enviarMensagem(){
-    const txt = (inputEl.value || '').trim();
-    if(!txt) return;
-    addMessage('Você', '#000000', txt);
-    inputEl.value = '';
-  }
-  inputEl.addEventListener('keydown', (e)=>{ if(e.key==='Enter') enviarMensagem(); });
-  sendBtn.addEventListener('click', enviarMensagem);
+  // Botão enviar mensagem pelo usuário
+  document.getElementById('sendBtn').addEventListener('click', () => {
+    const input = document.getElementById('userInput');
+    const texto = input.value.trim();
+    if(texto){
+      addMessage("Você", "#000", texto);
+      input.value = "";
+    }
+  });
 
+  // Também enviar no Enter
+  document.getElementById('userInput').addEventListener('keydown', e => {
+    if(e.key === 'Enter'){
+      e.preventDefault();
+      document.getElementById('sendBtn').click();
+    }
+  });
+
+  // Inicialização da tela
   renderParticipantes();
 
-  window.addEventListener('DOMContentLoaded', () => {
-    doctorVideo.play().then(() => {
-      doctorVideo.addEventListener('ended', () => {
-        doctorVideo.style.opacity = '0';
-        doctorAvatar.style.opacity = '1';
-        doctorVideo.style.pointerEvents = 'none';
-        iniciarCiclos();
-      });
-    }).catch(() => {
-      doctorVideo.style.opacity = '0';
-      doctorAvatar.style.opacity = '1';
-      doctorVideo.style.pointerEvents = 'none';
-      iniciarCiclos();
-    });
+  // Controle do vídeo e avatar do Dr. Lucas
+  // O vídeo começa tocando (autoplay muted)
+  // Quando acabar, vídeo some e avatar aparece, e chat inicia os ciclos automaticamente
+
+  doctorAvatar.style.opacity = '0';  // avatar inicialmente invisível
+
+  doctorVideo.addEventListener('ended', () => {
+    doctorVideo.style.opacity = '0'; // esconde vídeo
+    doctorAvatar.style.opacity = '1'; // mostra avatar
+    iniciarCiclos();
   });
+
+  // Caso o vídeo não carregue ou já tenha acabado (ex: no teste), inicia ciclos direto
+  doctorVideo.addEventListener('error', () => {
+    doctorVideo.style.opacity = '0';
+    doctorAvatar.style.opacity = '1';
+    iniciarCiclos();
+  });
+
+  // Caso queira iniciar ciclos automático se o vídeo não estiver presente
+  if(doctorVideo.readyState >= 3){ // vídeo já carregado
+    // Pode começar normalmente
+    // Se quiser iniciar ciclos direto, descomente:
+    // iniciarCiclos();
+  }
 
 </script>
 </body>
